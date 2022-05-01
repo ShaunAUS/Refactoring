@@ -9,7 +9,7 @@
 
 => **변수 캡슐화**하기 적용!
 
-### 전역데이터/변수 캡슐화
+### 전역데이터/ 변수 캡슐화
 
 ![](https://velog.velcdn.com/images/wnsqud70/post/a2a06b3c-ad78-430e-8dcf-074a68769d78/image.png)
 
@@ -30,6 +30,8 @@
 # 가변데이터
 
 - 데이터 변경을 하다보면 예상치 못했던 결과나 해결하기 어려운 버그가 발생하기도 한다.
+
+- **변경할수 있는 데이터를 최대한 줄이도록 노력해야 한다.(그 변경으로 인한 사이드 이팩트 떄문)**
 
 ## 사용할 수 있는 리팩토링 기술
 
@@ -104,9 +106,116 @@
 ### 가변데이터/ 파생 변수를 질의 함수로 바꾸기
 
 
+- 어떠한 **계산식을 통해 알아낼수 있는 변수는 제거하는게 좋다** . 하지만 그 **변수데이터가 불변이면 상관없다**.
+
+- 변수를 제거하고 그 계산식을 아예 함수에 넣어버리자.
+
+![](https://velog.velcdn.com/images/wnsqud70/post/595f468b-ae66-4d48-b687-32b0a76eaeed/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/be020810-4c1e-464c-8304-224e26492411/image.png)
+- 이런 식이면 discountedTotal을 구할수가 없다. (setDiscount가 먼저 실행되야하기 떄문)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d06b7b72-378a-4c61-af34-593d01d38152/image.png)
+
+- **계산식을 이용해 구하는 변수를 없애고 계산식을 직접 넣어주자.**
+
+- 변수를 줄임으로서 복잡도도 낮아지고 코드도 깔끔해진다.
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/f54d3e52-b7c9-4b7f-88f6-1dc188fe9df3/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/ad665352-b29f-44fc-9e2d-a4f4bd4158eb/image.png)
+
+- 이 예제 또한 계산식으로 변수를 구하지말고 **계산식 자체를 바로 함수안으로 넣어준다.**
 
 
 
 
+### 가변데이터/ 여러 함수를 변환 함수로 묶기
 
+
+- 관련있는 여러 파생 변수를 만들어내는 함수가 여러곳에서 만들어지고 사용된다면 그러한 파생 변수를 **변환 함수** 를 통해 한곳으로 모아둘 수 있다.
+
+
+
+- **소스 데이터가 변경될수 있는 경우**에는 **"여러 함수를 클래스로 묶기"** 를 사용하는 것이 적절하다 
+
+- **소스 데이터가 변경되지 않는 경우**에는  두 가지 방법 다 사용 가능하지만 변환 함수를 사용해서 불변 데이터의 필드로 생성해 두고 재사용할 수도 있다.
+
+> **변환함수** :기존데이터를 받아서 새로운데이터 만들어주기
+> **데이터가 불변이면** = 클래스로 묶거나 , 트랜스폼으로 묶거나
+**데이터가 변경되면** =  클래스로 묶기
+
+![](https://velog.velcdn.com/images/wnsqud70/post/3ae5ab56-fc44-4914-be17-431303afc84f/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/33c18c76-5b4c-43c0-a024-10ef9e72265f/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/ce221b62-b7b0-4eb1-a236-e183415f6f9c/image.png)
+
+- 비슷한 로직을 가지고 있는 클래스가 각각 존재한다. 상속으로 상위 클래스로 빼내도 되지만 여기서는 변환함수를  사용해서 새로운 데이터타입을 만들어내는 방법을 적용할예정
+
+![](https://velog.velcdn.com/images/wnsqud70/post/ca0bdb36-bbb1-44c9-8474-1added0073bf/image.png)
+
+- **record로 불변데이터를 만들어준다.  클래스들이 공통으로 자주사용하는 로직을 여기에 넣어준다.**
+
+![](https://velog.velcdn.com/images/wnsqud70/post/2bcdb1ac-d9e7-4a07-a211-99067e3e6798/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/e62a17be-4bf6-4c03-b638-509caa9b7087/image.png)
+
+- 공통적으로 사용하는 로직을 record 불변데이터에서 받아오도록한다.
+
+![](https://velog.velcdn.com/images/wnsqud70/post/fab80989-11d6-4abf-bbae-0a55bfdf9f5d/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/99f36e47-3b46-4a97-bb46-34c641458735/image.png)
+
+- 클라 1.  ,클라 2 도 역시나 **공통적으로 자주쓰는 로직을 똑같이 한곳에서 가져올수있도록 고쳐준다. **
+
+- 부모클래스에서 그냥 상속으로 빼내도 되고, 이방법은 뭔가 부모 -> record 클래스 가는 느낌(?)
+
+> => 변환함수를 통해 새로운 **record를 만들고 그 recored 에 불변하는 필드(공통된 로직)를 추가**함으로써 중복되던 메서드들이나 로직을 제거 할수있다.
+
+
+
+### 가변데이터/ 참조를 값으로 바꾸기
+
+= 변하는 값을 변하지 않는 값으로 바꾸기
+
+> 1. 객체는 크게 두가지로 볼수있다.
+- **레퍼런스 객체**: 가변 
+- **Value 객체**: 불변 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/6663185f-efac-4061-9477-06a83e88d8e5/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/954f4ec9-08fd-4924-aacc-fc2c1bb79463/image.png)
+
+
+- TelephoneNumber 는 reference 객체,  person은 value 객체
+
+![](https://velog.velcdn.com/images/wnsqud70/post/f6733ea9-40d7-4d8d-9382-1657f72b8500/image.png)
+
+>  Reference Object -> Value Object   
+ - setter없애기
+ - 필드 private
+ - 오직 생성자로만 데이터 초기화 가능,
+ - hashCode,equals
+- 이건 자바 11버전.  
+
+
+- 자바 14버전이후로는 그냥 **record** 
+![](https://velog.velcdn.com/images/wnsqud70/post/7aaead84-97be-4c87-a65e-bc1fb2dc7042/image.png)
+
+- 객체를 참조해서 수정할떄코드들도 수정해준다.
+
+- **setter를 사용할수 없으니 생성자를 통해 값 초기화** 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/a659b05c-4617-4ac0-bab8-7e4e8b1814bc/image.png)
+
+- 하지만 자바 14버전 이후로 recored 를 사용하면 저 한줄로도 가능하다
+
+> Record 간단 설명
+- 불변
+- 참조만 가능한 getter만 존재(메서드명은 필드이름이다)
+- hashCode,Equals 구현되있음
+- 코틀린의 Data class 와 매우 흡사
+
+
+
+
+ 
 
