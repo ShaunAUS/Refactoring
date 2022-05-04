@@ -154,3 +154,80 @@
 - 필드를 넘겨주자 CustomerContract 생성자에 discopuntRate 를 넘겨주고  getter/setter 도 CustomerContract의 getter/setter 로 접근하도록 만들어준다(pritavte)
 
 
+## 산탄총 수술 / 클래스 인라인
+
+- 클래스 합치기
+
+- 리팩토링을 하는 도중에 클래스의 책임을 옮기다보면 **클래스의 존재 이유가 빈약 해지는 경우가 발생**
+
+- 필드옮기기 -> 생성자 -> 메서드 수정
+
+> -두개의 클래스를 여러 클래스로 나누는 리팩토링 경우-
+> 1. 우선 **"클래스 인라인"** 을 활용하여 두클래스를 한곳으로 모은다
+2. 그다음 **"클래스 추출"**하기로 새롭게 분리
+
+![](https://velog.velcdn.com/images/wnsqud70/post/83db71bd-975b-465d-bd42-ee9f045ec4e4/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/738335d2-4ec5-4218-b94a-c5c838c53a74/image.png)
+
+
+- TrackingInformation클래스를  -> shipment 클래스로 옮겨서 합치는 경우
+
+![](https://velog.velcdn.com/images/wnsqud70/post/50357ddd-2d7f-4d75-8e8d-31eaba319548/image.png)
+
+- TrackinInformation -> Shipment 클래스로 합쳤으니  TrackinInformation 에 해당하는 값들은 지워준다
+# 기능편애
+
+- 어떤 모듈에 있는 함수가 **다른 모듈에 있는 데이터나 함수를 더 많이 참조**하는 경우
+
+### 관련 리팩토링 기술 
+- **함수 옮기기** -> 함수를 적절한 위치로 옮기기
+- **함수 추출하기** -> 함수 일부분만 다른 곳의 데이터와 함수를 많이 참조하면 이것으로 나눈 다음에 함수 옮기기 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/37457c76-0f58-4b91-a44a-2bf74811fc19/image.png)
+
+- 이렇게 각각의 클래스가 있다. bill에서는 굳이 다른클래스들을 참조하여 그값을 bill 클래스 안에서 계산하고 있다. 메서드의 위치와 기능편애를 확인해주자.
+- 이렇게 여러 모듈을 각가 쓰고 있는경우에는 각각 분리해준뒤에 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/dfa344e6-97ac-494d-927a-8c510e9c12f7/image.png)
+
+- 메서드추출을 한뒤 각각클래스에 넘겨준다.
+- Bill 클래스에서는 거기에 걸맞게 인라인 함수로 코드 정리를 해준다.
+
+# 데이터 뭉치
+
+- **항상 뭉쳐다니는 데이터**는 한 곳으로 모아두자
+- 여러 클래스에 존재하는** 비슷한 필드 목록**
+- 여러 **함수에 전달하는 매개변수** 목록 (줄이기)
+
+### 관련 리팩토링 기술
+
+- **클래스 추출하기** => 여러필드를 하나의 객체로
+- **매개변수 객체 만들기** => 활용해 메서드 매개변수 줄이기
+
+![](https://velog.velcdn.com/images/wnsqud70/post/0b7fcb87-f1ca-4d90-a188-a3ea0f9e2d64/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/3bf7fcef-5c37-4135-b214-d21f0ed4ab14/image.png)
+
+- 이 두 클래스에서  areacode , number 은 항상 같이 다니기 떄문에 데이터 뭉치라고 볼수 있다.
+
+- 데이터 뭉치들을 한번에 묶는 클래스를 따로 만들어준다. (  getter/setter/constructor)
+
+-  Employee 쪽에  그 클래스를 적용시킨다. -> toString() 으로 우리가 필요한 메서드를 만들어준다.
+
+![](https://velog.velcdn.com/images/wnsqud70/post/1c4a5282-2e9c-481a-abc0-bec489eb0157/image.png)
+
+- 데이터 뭉치 클래스를 받아줫으니 중복되는 필드들을 지워준다. 이렇게 깔끔하게 코드를 정리해줄수 있다.
+
+![](https://velog.velcdn.com/images/wnsqud70/post/2d22c239-eea7-4593-b399-0c4841501c83/image.png)
+
+
+- 반대쪽도 똑같이 정리해준다. 
+
+- telephoneNumber 의 필드값들의 이름이 그전에는 그이름들이 맞았지만 employee도 참조를 하니 좀더 일반적인 이름으로 수정 해준다
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/4c4591b2-f369-458b-93f3-e06d5e3952ca/image.png)
+
+- 테스트 코드 생성자 부분도 수정해준다.
+
+
