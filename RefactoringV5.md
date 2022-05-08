@@ -121,3 +121,32 @@
 ![](https://velog.velcdn.com/images/wnsqud70/post/94aa9fbc-86a3-4d8f-8d6a-a8785ed248c1/image.png)
 
 - 생성자 -> 필드(다른객체) 초기화 -> 그객체의 메서드
+
+# 기본형 집착/ 조건부 로직을 다형성으로 바꾸기
+
+- 복잡한 switch, if- else 문은 **상속**이나 **다형성**을 활용해 해결할수 있다.
+
+예) 이러한경우에는 이렇게 동작하고 , 저러한 경우에는 저렇게 동작
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d82f1435-b62c-4e8a-bd5d-75bf7a3f3335/image.png)
+
+- 이 예제인 경우에도 적용이 가능하다 (switch 문)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/e9c75c84-126a-450f-a56e-067a2c9bf6a4/image.png)
+
+
+- 일단 상속을 받는 자식 클래스들을 만들어준다
+
+![](https://velog.velcdn.com/images/wnsqud70/post/8cbda2c3-5d56-490a-bef5-9c79a658cee2/image.png)
+
+- 부모 클래스의 메서드들도 수정 해준다.
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/2968d8f8-f7aa-4be8-a8c0-993cf75d63fc/image.png)
+
+
+- type 라는 필드는 더이상 필요가 없으므로 지워주고 그에 해당하는 생성자도 지워준다.
+
+- 오버라이드를 당하는(?) 메서드들도 한눈에 보기좋게 abstract로 만들어준다
+
+- **자식클래스 중에서 중복되는 메서드는 위로 (부모클래스로) 올려준다.**
