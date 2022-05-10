@@ -206,3 +206,107 @@
 - 사용하지 않는 코드가 애플리케이션 성능이나 기능에 영향을 끼치지는 않는다.
 
 - **나중에 필요해질 코드라 하더라도 지금 쓰이지 않는 코드라면 (주석으로 감싸는게 아니라) 삭제 해야한다.**
+
+# 임시필드
+
+- **클래스에 있는 어떤 필드가 특정한 경우에만 값을 갖는 경우**
+
+### 관련 리팩토링 기술
+
+- 해당 변수 옮기기 => **클래스 추출하기**
+- 해당 변수를 사용하는 함수 옮기기 => **함수 옮기기**
+
+- 특정한 경우에 해당하는 클래스를 만들어 해당조건을 제거 =>** 특이 케이스 추가하기**
+
+
+# 임시필드 /  특이케이스 추가하기
+
+- **어떠한 경우 이런 로직이 실행되고 어떠한 경우에는 저런 로직이 발생하는 경우**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d15a2ec7-b842-4eb7-ade0-5fb73cd8d3ef/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/7a7fb9d4-a78c-424f-bc41-7245fd42800c/image.png)
+
+- customer 클래스중 필드인 name이 unknown 인 경우 어떠한 로직이 발생한다. "unknown 인경우" 가 반복된다. 이 반복되는것을 따로 빼서 클래스로 만들어 주자.
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/9a90c767-fae7-4d06-8baf-f26b0e3e8fd1/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/c7d55e93-78e2-43aa-9077-f9c355b7698d/image.png)
+
+
+- **메서드 추출로 반복되는 부분을 추출**해준다. isUnknown 을 보면 customer의 정보만 필요함으로 **메서드의 위치** customer이 더 적절함으로 메서드위치를 옮겨주자.
+
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/dfcc4196-491a-4d5e-ac62-1b2a7f375bb2/image.png)
+- Customer의 isUnknown 은 이름이 있으니까 false 그 반대 unknownClass는 true
+
+![](https://velog.velcdn.com/images/wnsqud70/post/e46a5da0-fbda-433e-b0bc-b4f27a67c2e2/image.png)
+
+
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/a82111c9-2bac-4935-b97c-bb8e64af5843/image.png)
+
+![](https://velog.velcdn.com/images/wnsqud70/post/b59ddacf-da62-4ce8-8533-13b7de3c3a8e/image.png)
+
+
+- **매개변수 Site**의 값에 따라 좌지우지 되야한다. Site 값을 설정해주자
+
+- **unknown 이면 unkownCustomer 아니면 customer**
+
+- 캡슐화 
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/b929237b-d892-462e-a202-ce4ae7ed5f23/image.png)
+
+
+- 더 간략하게, 더 깔끔하게 줄여보자. 냄새를 맡자 냄새
+
+
+- **여기서 주목해야 할점은 Site 값이 들어올때 이미 unknownCustomer / Customer 인지 분별이 되서 넘어온다는점!**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/fef58343-6674-4873-af78-208360632841/image.png)
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/cfde2cbf-5045-4381-9563-e8c58fc69d2e/image.png)
+
+
+- 기존 코드에서는 unknownCustomer 일때 특정한 값을 변수에 대입해서 반환한다. Customer 일때는 클래스의 필드 값반환.
+
+- **unknownCustomer 클래스에 아예 고정값을 넣어** 버려서 두번쨰 사진처럼 코드를 한줄로 줄일수 있다.
+
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/5bf6b17c-7071-48a1-b11b-2eaf31700569/image.png)
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/0658b95e-d6dd-4efa-ad36-497fce40e485/image.png)
+
+
+- 두번째 코드변경이다. 첫번째 변경사항과 매우 흡사하다. 기존 billPlan() 부분도 **커스터머 종류에 따라 값을 다르게 출력( 하나는 고정값)**
+
+
+- customer 일경우 그 클래스의 필드값 반환 / unknownCustomer일 경우 객체반환 ->
+**unknownCustomer 필드 초기화시 아예 필드에 객체값을 넣어준다.** 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/8327b9ad-27fb-43c7-af2d-989e4ceecf61/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/1f70d1ee-52ab-4552-af8a-3083e88dcf0f/image.png)
+
+
+
+- 기존의 코드는 unknown일경우 0반환 / customer 일경우 해당 필드 값 반환
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/b8d1d5db-da3f-4717-a07d-e8868ab70918/image.png)
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d7cabc6f-7085-4eed-8d12-5f7fd5f69dd9/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/83227967-1ee0-4705-9810-3eb99977f598/image.png)
+
+
+- customer일 경우 초기화된 필드값을 그대로 반환 하고 / unknownCustomer 일경우 도 따로 초기화된 필드값을 반환 -> **_그 값이 상속을 받아 값을 따로 설정_**
+
