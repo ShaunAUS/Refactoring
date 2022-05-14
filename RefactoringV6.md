@@ -89,4 +89,77 @@
 
 - 상속 관계를 끊는 방법은 **필드로 그 객체를 주입 받는 방법**이다. 이렇게 하면 상속관계를 끊었지만 여전히 슈퍼클래스에 해당했었던 클래스를 주입을 받아 사용 가능하다.
 
+
+### 중재자/ 서브클래스를 위임으로 바꾸기
+
+- **"상속"  대신 "위임" 을 선호하라는 말은 결코 "상속은 나쁘다" 라는 말이 아니다.**
+
+- **처음에는 상속을 적용하고 언제든지 위임으로 전환할수 있어야 한다.**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/e28dea88-f548-444d-8477-cd4a5362b9fc/image.png)
+
+
+- 비슷한 기능을 하지만 특수한 경우에만 다른 기능을 하는 상속관계 두 클래스가 있다. 서브 클래스는 PreminumExtra 라는 클래스를 참조함 
+
+![](https://velog.velcdn.com/images/wnsqud70/post/7a9b6ae2-7616-4876-a11d-4ed4e58788ed/image.png)
+
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d9aa92b0-2667-4ff6-ae6b-2f52db12c8f8/image.png)
+
+
+- 또한 생성자 이외에 **팩토리 메서드**도 만들어준다.
+
+> - ** 팩토리 메서드와 생성자의 큰 차이점은 네이밍에서 자유롭고 return값에 서브클래스 반환 가능.**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/9a05d213-b399-43ae-a256-2d8471035d02/image.png)
+
+
+- **나중에 최종적으로는 PremiumBooking 을 premiumDelegate로 옮길꺼고 서브클래스 PremiumBooking 을 삭제 예정**
+
+- 왼쪽 클래스의 hasTalkback () 메서드를 오른쪽 클래스로 옮겨준뒤 그것을 호출하도록 만듬
+
+- **오른쪽 클래스는 서브클래스를 대신하는 클래스 , 슈퍼클래스를 상속받지 않고 주입(위임)을 받는다**
+
+- **점점 왼쪽클래스 (PreminumBooking) 클래스는 중재자가 된다.(아무의미 없는 코드)**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/8342fa62-4167-433c-8d6f-f55ccd776510/image.png)
+![](https://velog.velcdn.com/images/wnsqud70/post/7bb21d9d-f662-4a5e-a32e-aa8c4e67d5c1/image.png)
+
+
+- **슈퍼클래스의 hasTalkBack() 메서드에서 premiumDelegate 유무에 따라 실행코드를 좌지우지 해준다.**
+
+- 존재하면 Delegate -> hasTalkBack()  / 없으면 기존코드
+
+- 이렇게 해주면 중재자 역활을 하는 PremiunmBooking - hasTalkBack() 메서드는 필요 없어진다.
+
+- **Delegate가 서브클래스 역활을 함**
+
+
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/43d60a17-e53a-4319-ac70-fd36724cbdc4/image.png)
+
+- 서브클래스의 **나머지 메서드들도 Delegate 로 옮겨주고 **
+
+- Booking 의 나머지 메서드들도 **특수한경우(Delegate가 있는경우) 다르게 동작**하도록 바꿔주자 
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/d4a66e9d-cee8-4402-8743-fabff48418cc/image.png)
+
+
+- 나머지 메서드 두개도 첫 메서드 처럼 슈퍼클래스에서 Delegate가 있냐 없냐 에 따라 다르게 동작하도록 설정 했다.
+
+- 있으면 실질적 로직이 들어있는 Delegate클래스의 메서드를 사용하도록 했고 없다면 기존 결과 값을 반환 하도록 했다.
+
+- 그리고 **팩토리메서드에서 중재자 역활을 하던 PremiumBooking 클래스(서브클래스) 는 더이상 필요없으므로 지우고 슈퍼클래스만 받아도 된다.(필요한것, 특수한경우 는 Delegate 클래스로 다 옮겼으니까.)**
+
+
+> -> **특수한 경우에만 다르게 동작할수 있도록 코드를 설정하고 클래스로 빼냈다.**
+->** 서브클래스를 다른 클래스로 뺴내기**
+
+
  
