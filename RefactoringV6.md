@@ -162,4 +162,61 @@
 ->** 서브클래스를 다른 클래스로 뺴내기**
 
 
+# 내부자 거래
+
+- 어떤 모듈이 다른 모듈의 내부 정보를 너무 많이 알고 있는경우 or 데이터들이 외부에 너무 공개되 있는 경우
+
+![](https://velog.velcdn.com/images/wnsqud70/post/fd5cee71-6cc9-45bf-8753-3247681b7ec2/image.png)
+
+
+
+- 간단하다. 메서드의 위치와도 관련되있다.  CheckIn 클래스의 메서드는 대부분 Ticket 클래스의 데이터들을 사용한다. 
+
+- 이런경우에는 응집도를 높이기 위해 데이터를 많이 사용하는 쪽으로 옮겨준다.
+
+# 거대한 클래스
+- 클래스가 거대할수록, 많은필드, 많은 메서드 , 즉 많은 책임이 있다.
+
+- **최대한 분리하며 서로 응집도는 높지만 결합도는 낮게 설정 해주자.**
+
+### 거대한 클래스 / 슈퍼클래스 추출하기 
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/936fbfa4-fbad-440d-92d6-5bde62c9092d/image.png)
+
+-  두 클래스의 **공통점인 부분을 묶어서 따로 상위클래스로 빼내준다**(name, monthlyCost() , annualCost())
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/3e35a35f-f41e-4a94-b3bb-356efadd94e5/image.png)
+
+-  monthlyCost() 만 각각 클래스마다 동작 방식이 달라 추상메서드로 만들어준다.
+
+# 서로 다른 인터페이스의 대안 클래스들(= 하나의 인터페이스로 다른 클래스들 감싸기)
+
+- **비슷한 일을 여러 곳에서 서로 다른 규약을 사용해 지원**하고 있는 코드 냄새
+
+- **공통인터페이스로 묶어준다**   or  **부모-자식 상속관계**로 추출
+
+![](https://velog.velcdn.com/images/wnsqud70/post/430a75c4-b70b-41d9-a306-37fc6d0bfbb9/image.png)
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/2f95d9d5-5197-4032-b36c-df46f462ab0b/image.png)
+
+
+- 이렇게 다른 인터페이스를 사용하며 이름도 다르지만 **동작방식은 매우 흡사** 한 두개의 클래스가 있다.
+
+- **하나의 인터페이스로 두개의 클래스를 묶어주자!**
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/01f6623d-6cfe-45a3-9768-710aed0fc48e/image.png)
+
+
+![](https://velog.velcdn.com/images/wnsqud70/post/4738060c-8828-4dca-a7ed-08f57b093063/image.png)
+
+
+- 이렇게 비슷한내용을 토대로 **하나의 interface로 묶어준뒤 **Service - Impl 클래스를 만들어 각각 다르게 동작하도록 만들어준다.
+
+
+
+
  
